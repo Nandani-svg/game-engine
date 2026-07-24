@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Growth Engine — Endless Generative Organism</title>
+<meta name="description" content="An endless generative organism growing forever via space colonization and collision avoidance. No reset, no terminal state." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<canvas id="world" aria-label="Generative growth simulation"></canvas>
+
+
+<header id="hud" rolee="banner">
+    <div id="hud-left">
+       <h1 id="hud-title">Growth Engine</h1>
+   <span id="hud-sub">space colonization organism</span>
+     </div>
+     <nav id="hud-stats" aria-label="Live simulation statistics">
+       <span class="stat" title="Frames per second">
+         <span class="stat-label">FPS</span>
+         <span class="stat-val" id="s-fps">—</span>
+       </span>
+       <span class="stat-sep"></span>
+       <span class="stat" title="Active growth tips">
+         <span class="stat-label">TIPS</span>
+         <span class="stat-val" id="s-tips">0</span 
+ </span>
+      <span class="stat-sep"></span>
+      <span class="stat" title="Total segments grown">
+        <span class="stat-label">SEGS</span>
+        <span class="stat-val" id="s-segs">0</span>  
+     </span>
+        <span class="stat-sep"></span>
+        <span class="stat" title="Colony count">
+          <span class="stat-label">COLS</span>
+          <span class="stat-val" id="s-cols">0</span>
+        </span>
