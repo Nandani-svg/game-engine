@@ -210,4 +210,53 @@ input[type="range"]::-moz-range-thumb {
     text-align: right;
      font-variant-numeric: tabular-nums;
     }
-    
+
+
+.toggle-row {
+    display: flex;
+    gap: 5px;
+}
+
+.toggle {
+    flex: 1;
+    padding: 5px 7px;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
+    background: rgba(123, 159, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+}
+.toggle:hover {
+    border-color: var(--border-bright);
+    color: var(--text);
+    background: rgba(123, 159, 255, 0.12);
+}
+.toggle.active{
+    background: rgba(123, 159, 255, 0.18);
+    border-color: var(--border-bright);
+    color: var(--accent);
+    box-shadow: 0 0 10px rgba(123, 159, 255, 0.15), inset 0 0 8px rgba(123,159,255,0.06);
+}
+
+
+.dock-btn {
+    padding: 8px 10px;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    background: rgba(123, 159, 255, 0.08);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: center;
+    width: 100%;
+}
+.dock-btn:hover {
+    background: rgba(123, 159, 255, 0.18);

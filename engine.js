@@ -546,3 +546,125 @@ canvas.addEventListener('touchstart', e => {
   if (e.touches.length === 1) {
     const t = e.touches[0];
      drag = { sx: t.clientX, sy: t.clientY, cx: this.cam.x, cy: this.cam.y };
+     this._isPanning = false;
+     pinch0 = null;
+  } else if (e.touches.length === 2) {
+   const dx = e.touches[1].clientX - e.touches[0].clientX;
+   const dy = e.touches[1].clientY - e.touches[0].clientY;
+   pinch0 = Math.sqrt(dx * dx + dy * dy);
+   pinchScale0 = this.cam.scale;
+   drag = null;
+  }
+}, { passive: false });
+ canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (e.touches.length === 1 && drag) {
+        const t = e.touches[0];
+        const dx = t.clientX - drag.sx, dy = t.clientY - drag.sy;
+if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+  this._isPanning = true;
+  this.cam.x = drag.cx + dx;
+  this.cam.y = drag.cy + dy;
+  this.needsFullRedraw = true;
+}
+} else if (e.touches.length === 2 && pinch0 !== null) {
+        const dx = e.touches[1].clientX - e.touches[0].clientX;
+        const dy = e.touches[1].clientY - e.touches[0].clientY;
+        const d  = Math.sqrt(dx * dx + dy * dy);
+        const mx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const my = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        const newScale = clamp(pinchScale0 * (d / pinch0), 0.04, 12);
+        this.cam.x = mx - (mx - this.cam.x) / this.cam.scale * newScale;
+        this.cam.y = my - (my - this.cam.y) / this.cam.scale * newScale;
+        this.cam.scale = newScale;
+        this.needsFullRedraw = true;
+}
+}, { passive: false });
+    canvas.addEventListener('touchend', e => {
+      e.preventDefault();
+      if (!this._isPanning && e.changedTouches.length === 1) {
+        const t = e.changedTouches[0];
+        this._clickAt(t.clientX, t.clientY);
+      }
+      drag = null; pinch0 = null;
+    }, { passive: false });
+
+
+const speedSlider = document.getElementById('ctrl-speed');
+const speedVal = document.getElementById('speed-val');
+speedSlider.addEventListener('input', () => {
+  this.speedMult = +speedSlider.value;
+speedVal.textContent = this.speedMult + '×';
+    });
+
+const glowBtn = document.getElementById('ctrl-glow');
+glowBtn.addEventListener('click', () => {
+  this.showGlow = !this.showGlow;
+ glowBtn.classList.toggle('active', this.showGlow);
+      glowBtn.setAttribute('aria-pressed', this.showGlow);
+    });
+
+const apBtn = document.getElementById('ctrl-ap');
+apBtn.addEventListener('click', () => {
+this.showAP = !this.showAP;
+  apBtn.classList.toggle('active', this.showAP);
+      apBtn.setAttribute('aria-pressed', this.showAP);
+      this.needsFullRedraw = true;
+    });
+
+const audioBtn = document..getElementById('ctrl-audio');
+audioBtn.addEventListener('click', () => {
+  if (!this.audio.active) {
+    this.audio.enable();
+    audioBtn.classList.add('active');
+    audioBtn.textContent = '♪ ON';
+     audioBtn.setAttribute('aria-pressed', 'true');
+          } else {
+    this.audio.disable();
+    audioBtn.classList.remove('active');
+    audioBtn.textContent = '♪ OFF';
+    audioBtn.setAttribute('aria-pressed', 'false');
+          }
+        });
+
+document.getElementById('ctrl-home').addEventListener('click', () => {
+  this.cam.x = this.W / 2;
+  this.cam.y = this.H / 2;
+  this.cam.scale = 1;
+  this.needsFullRedraw = true;
+});
+
+document.getElementById('insp-close').addEventListener('click', () => {
+  this.lockedColony = null;
+  this._hideInspector();
+});
+  }
+
+
+
+
+
+_spawnColony (wx, wy) {
+ const col = new Colony(this.colonies.length, wx, wy, this.tick);
+ this.colonies.push(col);
+ this._seedAP(col);
+ 
+ 
+ const nTips = 4 + Math.floor(Math.random() * 3);
+ for (let i = 0; i < nTips; i++) {
+const angle = (i / nTips) * Math.PI * 2 + rnd(-0.2, 0.2);
+ this.tips.push(new Tip(wx, wy, Math.cos(angle), Math.sin(angle), CFG.INIT_ENERGY, 0, col.id));
+ }
+
+
+   const chimeFreq = 110 * Math.pow(2, (col.hue / 360) * 2);
+    this.audio.chime(chimeFreq);
+    
+  return col;
+}
+
+
+_seedAP (colony) {
+
+  const centres = [];
+  for (let b = 0; b <  CFG.AP_BLOBS; b++) {
