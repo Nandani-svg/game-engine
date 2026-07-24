@@ -485,3 +485,64 @@ requestAnimationFrame(ts => this._loop(ts));
 
 _setupCanvas () {
     const resize = () => {
+  this.dpr = window.devicePixelRatio || 1;
+  this.W = window.innerWidth;
+  this.H = window.innerHeight;
+  this.canvas.width = this.W * this.dpr;
+  this.canvas.height = this.H * this.dpr;
+  this.canvas.style.width  = this.W + 'px';
+  this.canvas.style.height = this.H + 'px';
+
+  if (this.cam.x === 0 && this.cam.y === 0) {
+    this.cam.x = this.W / 2;
+    this.cam.y = this.H / 2;
+  }
+ this.needsFullRedraw = true;
+    };
+    resize();
+    new ResizeObserver(resize).observe(document.documentElement);
+  }
+
+  _setupUI () {
+    const canvas = this.canvas;
+
+
+let drag = null;
+canvas.addEventListener('mousedown', e => {
+      drag = { sx: e.clientX, sy: e.clientY, cx: this.cam.x, cy: this.cam.y };
+  this._isPanning = false;
+});
+window.addEventListener('mousemove', e => {
+  if (drag) {
+  const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+  this._isPanning = true;
+  this.cam.x = drag.cx + dx;
+  this.cam.y = drag.cy + dy;
+  this.needsFullRedraw = true;
+}
+  } else {
+ this._hoverUpdate(e.clientX, e.clientY);
+      }
+    });
+    window.addEventListener('mouseup', e => {
+      if (!this._isPanning && drag) this._clickAt(e.clientX, e.clientY);
+      drag = null;
+    });    
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+    const mx = e.clientX, my = e.clientY;
+        this.cam.x = mx - (mx - this.cam.x) * factor;
+        this.cam.y = my - (my - this.cam.y) * factor;
+        this.cam.scale = clamp(this.cam.scale * factor, 0.04, 12);
+        this.needsFullRedraw = true;
+}, { passive: false });
+
+
+
+let pinch0 = null, pinchScale0 = 1;
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (e.touches.length === 1) {
+    const t = e.touches[0];
+     drag = { sx: t.clientX, sy: t.clientY, cx: this.cam.x, cy: this.cam.y };

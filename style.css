@@ -188,3 +188,26 @@ input[type="range"]::-webkit-slider-thumb {
      width: 13px; height: 13px;
      border-radius: 50%;
      background: var(--accent);
+     box-shadow: 0 0 8px  var(--accent-glow), 0 0 0 2px rgba(123,159,255,0.2);
+     cursor: pointer;
+     transition: transform var(--transition);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+.range-readout {
+    font-size: 0.62rem;
+    border-radius: 50%;
+    min-width: 22px;
+    text-align: right;
+     font-variant-numeric: tabular-nums;
+    }
+    
