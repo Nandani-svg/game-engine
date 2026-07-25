@@ -260,3 +260,27 @@ input[type="range"]::-moz-range-thumb {
 }
 .dock-btn:hover {
     background: rgba(123, 159, 255, 0.18);
+    border-color: var(--border-bright);
+    color: var(--text-bright);
+    box-shadow: 0 0 12px rgba(123,159,255,0.12);
+}
+
+
+#inspector {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 245px;
+    background: var(--surface);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--pad);
+    z-index: 200;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+    transition: opacity var(--transition), transform var(--spring);
+    transform-origin: bottom right;
+}
+
+#inspector.hidden {

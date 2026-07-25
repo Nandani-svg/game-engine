@@ -668,3 +668,64 @@ _seedAP (colony) {
 
   const centres = [];
   for (let b = 0; b <  CFG.AP_BLOBS; b++) {
+    centres.push({
+        x: colony.x + gaussian() * CFG.AP_RADIUS * 0.45,
+              y: colony.y + gaussian() * CFG.AP_RADIUS * 0.45,
+            });
+          }
+
+const perBlob = Math.ceil(CFG.AP_COUNT / CFG.AP_BLOBS);
+let added = 0;
+
+for (const centre of centres) {
+ for (let i = 0; i < perBlob && added < CFG.AP_COUNT; i++) {
+  const spread = CFG.AP_RADIUS * 0.38;
+  const px = centre.x + gaussian() * spread;
+  const py = centre.y + gaussian() * spread;
+  const ap = new AP(px, py, colony.id);
+  this.apHash.insert(ap);
+  this.allAP.push(ap);
+  added++;
+ }
+}
+ colony.attractionPointsRemaining = added;
+}
+
+
+_growthCentroid () {
+if (this.tips.length === 0) return { x: 0, y: 0 };
+    let sx = 0, sy = 0;
+    for (const t of this.tips) { sx += t.x; sy += t.y; }
+    return { x: sx / this.tips.length, y: sy / this.tips.length };
+}  
+
+
+
+
+
+_simTick () {
+  this.tick++;
+
+
+if (this.tick >= this._nextSpawn) {
+this._nextSpawn = this.tick + CFG.SPAWN_TICKS + Math.floor(rnd(-20, 40));
+if (this.colonies.length < CFG.MAX_COLONIES) {
+  const c = this._growthCenttroid();
+  const angle = Math.random() * Math.PI * 2;
+  const dist = rnd(250, 600);
+  this._spawnColony(
+     c.x + Math.cos(angle) * dist,
+              c.y + Math.sin(angle) * dist,
+            );
+          }
+        }
+
+
+this._pendingNewTips.length = 0;
+const len = this.tips.length;
+for (let ti = 0; ti < len; ti++) {
+  const tip = this.tips[ti];
+  if (!tip.alive) continue;
+  this._tickTip(tip);
+      }
+      
