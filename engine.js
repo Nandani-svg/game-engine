@@ -912,3 +912,64 @@ _render () {
 
       this._applyCam();
       this._drawSegs(0, this.segments.n, vx0, vy0, vx1, vy1);
+      if (this.showAP) this._drawAP();
+
+      this.lastRenderedSeg = this.segments.n;
+      this.needsFullRedraw = false;
+
+  } else {
+
+  this._applyScreen();
+     ctx.fillStyle = `rgba(5,5,11,${CFG.FADE_ALPHA})`;
+     ctx.fillRect(0, 0, W, H);
+
+
+this._applyCam();
+this._drawGrid();
+
+this._applyCam();
+  this._drawSegs(this.lastRenderedSeg, this.segments.n);
+      if (this.showAP) this._drawAP();
+
+this.lastRenderedSeg = this.segments.n;
+  }
+
+
+  if (this.showGlow) {
+    this._applyCam();
+    this._drawGlows();
+  }
+}
+
+
+
+
+
+
+_drawSeg (from, to, vx0, vy0, vx1, vy1) {
+  if (from >= to) return;
+  const ctx = this.ctx;
+   const { x1, y1, x2, y2, lw, cr, cg, cb } = this.segments;
+   const cull = vx0 !== undefined;
+
+   ctx.lineCap = 'round';
+   ctx.lineJoin = 'round';
+
+  let pR = -1, pG = -1, pB = -1, pW = -1;
+  let open = false;
+
+for (let i = from; i < to; i++) {
+  if (cull) {
+
+      const mx = (x1[i] + x2[i]) * 0.5, my = (y1[i] + y2[i]) * 0.5;
+        if (mx < vx0 || mx > vx1 || my < vy0 || my > vy1) continue;
+      }
+
+const r = cr[i], g = cg[i], b = cb[i], w = lw[i];
+
+ if (r !== pR || g !== pG || b !== pB || Math.abs(w - pW) > 0.01) {
+        if (open) ctx.stroke();
+        ctx.beginPath();
+        ctx.strokeStyle = `rgb(${r},${g},${b})`;
+        ctx.lineWidth   = w;
+        pR = r; pG = g; pB = b; pW = w;

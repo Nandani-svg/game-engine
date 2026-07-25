@@ -355,3 +355,27 @@ pointer-events: none;
 
 #insp-body {
     display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ir {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    padding: 3px 0;
+     border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+.ir:last-child { border-bottom: none; }
+.ir-k {
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.ir-v {
+  color: var(--text);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.ir-v.hi { color: var(--accent); }
