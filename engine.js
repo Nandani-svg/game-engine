@@ -790,3 +790,125 @@ if (nearby.length >= CFG.MIN_BRANCH_PTS) {
             [ndx, ndy] = avgDir(tip.x, tip.y, groupA);
           } else {
             [ndx, ndy] = avgDir(tip.x, tip.y, nearby);
+          }
+        } else {
+             [ndx, ndy] = avgDir(tip.x, tip.y, nearby);
+                  }
+                } else {
+                  [ndx, ndy] = avgDir(tip.x, tip,y, nearby);
+                }
+              }
+
+
+const tentX = tip.x + ndx * CFG.STEP_LEN;
+const tentY = tip.y + ndy * CFG.STEP_LEN;
+    const segsNear = this.segHash.query(tentX, tentY, CFG.AVOID_RADIUS);
+
+if (segsNear.length > 0) {
+let nearestNode = null, nearestD2 = Infinity;
+ for (const node of segsNear) {
+        if (node.idx === tip.lastSegIdx) continue;
+        const dx2 = node.x - tentX, dy2 = node.y - tentY;
+        const d2 = dx2 * dx2 + dy2 * dy2;
+           if (d2 < nearestD2) { nearestD2 = d2; nearestNode = node; }
+ }
+ if (nearestNode) {
+
+ const [rx, ry] = norm2(tentX - nearestNode.x, tentY - nearestNode.y);
+ const b = CFG.AVOID_BLEND;
+ ndx = ndx * (1 - b) + rx * b;
+ ndy = ndy * (1 - b) + ry * b;
+   [ndx, ndy] = norm2(ndx, ndy);
+      }
+    }
+    
+    
+const nx = tip.x + ndx * CFG.STEP_LEN;
+const ny = tip.y + ndy * CFG.STEP_LEN;
+
+
+  const consumable = this.apHash.query(nx, ny, kr).filter(p => p.alive);
+  for (const ap of consumable) {
+    ap.alive = false;
+    this.apHash.remove(ap);
+    const owner = this.colonies[ap.colId];
+ if (owner) owner.attractionPointsRemaining = Math.max(0, owner.attractionPointsRemaining - 1);
+  }
+
+
+  const [r, g, b] = col.col(tip.gen);
+  const lw = col.sw(tip.gen);
+  const segIdx = this.segments.add(tip.x, tip.y, nx, ny, lw, r, g, b);
+  tip.lastSegIdx = segIdx;
+
+
+ const node = new SegNode((tip.x + nx) * 0.5, (tip.y + ny) * 0.5, segIdx);
+ this.segHash.insert(node);
+ 
+ 
+ col.segCount++;
+  if (tip.gen > col.maxDepth) col.maxDepth = tip.gen;
+
+
+  tip.x = nx; tip.y = ny;
+  tip.dx = ndx; tip.dy = ndy;
+  tip.energy -= CFG.ENERGY_DECAY;
+
+if (tip.energy <= 0 || tip.gen >= CFG.MAX_GEN) {
+  tip.alive = false;
+  return;
+}
+
+
+if (doBranch && groupB && groupB.length > 0 && tip.gen < CFG.MAX_GEN - 1) {
+      const [d2x, d2y] = avgDir(nx, ny, groupB);
+      const childEnergy = tip.energy * CFG.BRANCH_ENERGY;
+      tip.energy = childEnergy;
+
+   const child = new Tip(nx, ny, d2x, d2y, childEnergy, tip.gen + 1, tip.colId);
+      child.lastSegIdx = segIdx;
+      this._pendingNewTips.push(child);
+    }
+  }
+
+
+
+
+
+
+_applyCam () {
+  const { cam, dpr } = this;
+  this.ctx.setTransform(
+    cam.scale * dpr, 0, 0,
+    cam.scale * dpr,
+    cam.x * dpr, cam.y * dpr,
+  );
+}
+
+
+_applyScreen () {
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+  }
+
+_render () {
+  const ctx = this.ctx;
+  const { W, H, cam } = this;
+
+  if (this.needsFullRedraw) {
+
+    this._applyScreen();
+    ctx.fillStyle = CFG.BG_COLOR;
+    ctx.fillRect(0, 0, W, H);
+
+
+    this._applyCam();
+    this._drawGrid();
+
+
+  const margin = CFG.INFLUENCE_RADIUS * 2;
+      const invS   = 1 / cam.scale;
+      const vx0 = (-cam.x) * invS - margin, vy0 = (-cam.y) * invS - margin;
+      const vx1 = vx0 + W * invS + margin * 2, vy1 = vy0 + H * invS + margin * 2;
+
+      this._applyCam();
+      this._drawSegs(0, this.segments.n, vx0, vy0, vx1, vy1);

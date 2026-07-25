@@ -308,3 +308,50 @@ pointer-events: none;
     filter: drop-shadow(0 0 4px currentColor);
      animation: pulse 2s ease-in-out infinite;
 }
+
+@keyframes pulse {
+ 0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}    
+
+#insp-name {
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+}
+
+#insp-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    transition: color var(--transition), background var(--transition);
+    line-height: 1;
+}
+#insp-close:hover {
+    color: var(--danger);
+    background: rgba(255,107,138,0.1);
+}
+
+
+#insp-palette {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    height: 5px;
+}
+.pal-swatch {
+    flex: 1;
+    border-radius: 3px;
+    transition: flex var(--transition);
+}
+.pal-swatch:hover { flex: 2; }
+
+
+#insp-body {
+    display: flex;
