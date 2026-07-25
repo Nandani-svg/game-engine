@@ -729,3 +729,64 @@ for (let ti = 0; ti < len; ti++) {
   this._tickTip(tip);
       }
       
+
+  for (let i = this.tips.length - 1; i >= 0; i--) {
+    for(!this.tips[i].alive) this.tips.splice(i, 1);
+  }
+
+
+for (const t of this._pendingNewTips) {
+  if (this.tips.length < CFG.MAX_TIPS) this.tips.push(t);
+    }
+
+
+for (const col of this.colonies) {
+  if (!col.active) continue;
+  const hasTips = this.tips.some(t => t.colId === col.id);
+      if (!hasTips && col.attractionPointsRemaining <= 0) col.active = false;
+    }
+  }
+  
+  
+
+_tickTip (tip) {
+const col = this.colonies[tip.colId];
+if (!col) { tip.alive = false; return; }
+
+const ir = col.ir(this.tick);
+const kr = col.kr(this.tick);
+const bat = col.bat(this.tick);
+
+
+const nearby = this.apHash.query(tip.x, tip.y, ir).filter(p => p.alive);
+
+let ndx, ndy;
+let doBranch = false;
+let groupA = null;
+let groupB = null;
+
+if (nearby.length === 0) {
+
+tip.noFood++;
+    if (tip.noFood > CFG.NO_FOOD_DEATH) { tip.alive = false; return; }
+    const perturb = rnd(-0.28, 0.28);
+     const cos = Math.cos(perturb), sin = Math.sin(perturb);
+     ndx = tip.dx * cos - tip.dy * sin;
+     ndy = tip.dx * sin + tip.dy * cos;
+      [ndx, ndy] = norm2(ndx, ndy);
+} else {
+  tip.noFood = 0;
+
+if (nearby.length >= CFG.MIN_BRANCH_PTS) {
+
+ const angles = nearby.map(p => Math.atan2(p.y - tip.y, p.x - tip.x));
+ const spread = angularSpread(angles);
+
+ if (spread > bat) {
+
+  [groupA, groupB] = splitAtGap(nearby, tip.x, tip.y);
+          if (groupA.length > 0 && groupB.length > 0) {
+            doBranch = true;
+            [ndx, ndy] = avgDir(tip.x, tip.y, groupA);
+          } else {
+            [ndx, ndy] = avgDir(tip.x, tip.y, nearby);

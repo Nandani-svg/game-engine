@@ -284,3 +284,27 @@ input[type="range"]::-moz-range-thumb {
 }
 
 #inspector.hidden {
+opacity: 0;
+pointer-events: none;
+ transform: scale(0.9) translateY(8px);
+}
+
+#insp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#insp-name-wrap {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+#insp-badge {
+    font-size: 0.55rem;
+
+    filter: drop-shadow(0 0 4px currentColor);
+     animation: pulse 2s ease-in-out infinite;
+}
