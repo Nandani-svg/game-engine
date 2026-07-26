@@ -379,3 +379,26 @@ pointer-events: none;
   font-variant-numeric: tabular-nums;
 }
 .ir-v.hi { color: var(--accent); }
+.ir-v.hi2 { color: var(--accent2); }
+.ir-v.active-yes { color: #6dff9e; }
+.ir-v.active-no { color: var(--text-dim); }
+
+
+#insp-locked-tag {
+    margin-top: 10px;
+    padding: 3px 8px;
+    text-align: center;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    background:  rgba(123,159,255,0.08);
+    animation: lockedPulse 2.5s ease-in-out infinite;
+}
+.hidden { display: none !important; }
+
+@keyframes lockedPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}

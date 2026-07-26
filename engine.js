@@ -973,3 +973,64 @@ const r = cr[i], g = cg[i], b = cb[i], w = lw[i];
         ctx.strokeStyle = `rgb(${r},${g},${b})`;
         ctx.lineWidth   = w;
         pR = r; pG = g; pB = b; pW = w;
+        open = true;
+ }
+ ctx.moveTo(x1[i], y1[i]);
+ ctx.lineTo(x2[i], y2[i]);
+     }
+if (open) ctx.stroke();
+    }
+
+
+_drawGlows () {
+  const ctx = this.ctx;
+  const gr =  CFG.GLOW_RADIUS;
+  for (const tip of this.tips) {
+  const col = this.colonies[tip.colId];
+  if (!col) continue;
+    const [r, g, b] = col.col(tip.gen);
+        const grad = ctx.createRadialGradient(tip.x, tip.y, 0, tip.x, tip.y, gr);
+        grad.addColorStop(0,   `rgba(${r},${g},${b},0.72)`);
+        grad.addColorStop(0.4, `rgba(${r},${g},${b},0.3)`);
+        grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(tip.x, tip.y, gr, 0, Math.PI * 2);
+        ctx.fil();
+  }
+}
+
+
+_drawAP () {
+  const ctx = this.ctx;
+  for (const ap of this.allAP) {
+    if (!ap.alive) continue;
+    const col = this.colonies[ap.colId];
+    if (col) {
+      const [r,g,b] = col.col(0);
+              ctx.fillStyle = `rgba(${r},${g},${b},0.35)`;
+            } else {
+   ctx.fillStyle = 'rgba(180,200,255,0.25)';
+        }
+        ctx.beginPath();
+        ctx.arc(ap.x, ap.y, 2.2, 0, Math.PI * 2);  
+    ctx.fill();
+      }
+    }
+
+
+_drawGrid () {
+  const ctx = this.ctx;
+  const { cam, W, H, dpr } = this;
+  const step = 80;
+  const alpha = clamp(0.025 * cam.scale, 0.005, 0.06);
+  
+   ctx.fillStyle = `rgba(100,130,230,${alpha})`;
+    ctx.setTransform(cam.scale * dpr, 0, 0, cam.scale * dpr, cam.x * dpr, cam.y * dpr);
+
+    const invS = 1 / cam.scale;
+    const wx0  = (-cam.x) * invS, wy0 = (-cam.y) * invS;
+    const wx1  = wx0 + W * invS,  wy1 = wy0 + H * invS;
+
+    const gx0 = Math.floor(wx0 / step) * step;
+    const gy0 = Math.floor(wy0 / step) * step;
