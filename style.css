@@ -427,3 +427,27 @@ pointer-events: none;
     }
 
 @keyframes hintFade {
+ 0%   { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  10%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+
+@media (max-width: 768px) {
+  #hud { padding: 0 12px; gap: 0; }
+  #hud-sub { display: none; }
+  #hud-stats { gap: 0; }
+  .stat { padding: 0 8px; }
+  .stat-sep { display: none; }
+
+
+#inspector {
+    bottom: 0; right: 0; left: 0;
+    width: 100%
+     border-radius: var(--radius-lg) var(--radius-lg) 0 0;

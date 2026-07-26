@@ -1094,3 +1094,65 @@ _hoverUpdate (sx, sy) {
 _showInspector (col) {
 document.getElementById('insp-name').textContent = col.name;
 
+
+const badge = document.getElementById('insp-badge');
+const [r,g,b] = col.col(0);
+badge.style.color = `rgb(${r},${g},${b})`;
+
+
+const pDiv = document.getElementById('insp-palette');
+pDiv.innerHTML = '';
+for (const [pr,pg,pb] of col.palette) {
+const sw = document.createElement('div');
+sw.className = 'pal-swatch';
+ sw.style.background  = `rgb(${pr},${pg},${pb})`;
+      sw.style.boxShadow   = `0 0 6px rgba(${pr},${pg},${pb},0.65)`;
+      pDiv.appendChild(sw);
+    }
+
+document.getElementById('inspector').classList.remove('hidden');
+const lockedTag = document.getElementById('insp-locked-tag');
+lockedTag.classList.toggle('hidden', !this.lockedColony);
+  }
+
+  _hideInspector () {
+    this.hoveredColony = null;
+document.getElementById('inspector').classList.add('hidden');
+  }
+
+  _updateInspectorBody () {
+const col = this.lockedColony || this.hoveredColony;
+if (!col) return;
+
+const age = this.tick - col.spawnTick;
+const ir = col.ir(this.tick).toFixed(1);
+const kr = col.kr(this.tick).toFixed(1);
+const food = col.attractionPointsRemaining;
+
+document.getElementById('insp-body').innerHTML = `
+      <div class="ir" role="listitem">
+        <span class="ir-k">ID</span>
+        <span class="ir-v">#${col.id}</span>
+      </div>
+      <div class="ir" role="listitem">
+        <span class="ir-k">AGE</span>
+        <span class="ir-v">${this._fmt(age)} ticks</span>
+      </div>
+      <div class="ir" role="listitem">
+        <span class="ir-k">SEGMENTS</span>
+        <span class="ir-v hi">${this._fmt(col.segCount)}</span>
+      </div>
+      <div class="ir" role="listitem">
+        <span class="ir-k">MAX DEPTH</span>
+        <span class="ir-v">${col.maxDepth}</span>
+      </div>
+ <div class="ir" role="listitem">
+        <span class="ir-k">FOOD LEFT</span>
+        <span class="ir-v hi2">${food}</span>
+      </div>
+      <div class="ir" role="listitem">
+        <span class="ir-k">ACTIVE</span>
+        <span class="ir-v ${col.active ? 'active-yes' : 'active-no'}">${col.active ? '● alive' : '○ dormant'}</span>
+      </div>
+      <div class="ir" role="listitem">
+        <span class="ir-k">INFLUENCE R</span>
