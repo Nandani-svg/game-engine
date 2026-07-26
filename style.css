@@ -451,3 +451,26 @@ pointer-events: none;
     bottom: 0; right: 0; left: 0;
     width: 100%
      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+     max-height: 260px;
+     overflow-y: auto;
+     transform-origin: bottom center;
+}
+#inspector.hidden {
+    transform: translateY(20px) scale(0.98);
+}
+
+
+#dock {
+    bottom: 12px; left: 12px;
+    padding: 10px;
+    gap: 8px;
+    min-width: 130px;
+}
+}
+
+@media (max-width: 375px) {
+
+#s-segs, #s-tick,
+.stat:nth-child(7), .stat:nth-child(9) { display: none; }
+#hud-title { font-size: 0.9rem; }
+}

@@ -1156,3 +1156,63 @@ document.getElementById('insp-body').innerHTML = `
       </div>
       <div class="ir" role="listitem">
         <span class="ir-k">INFLUENCE R</span>
+      <span class="ir-v">${ir}</span>
+      </div>
+      <div class="ir" role="listitem">
+      <span class="ir-k">KILL R</span>
+      <span class='ir-v">${kr}</span>
+  </div>
+  `;
+
+
+  document.getElementById('insp-locked-tag').classList.toggle('hidden', !this.lockedColony);
+  }
+  
+_fmt (n) {
+   if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + 'k';
+    return String(n);
+}
+
+_updateHUD () {
+ const now = performance.now();
+    this._fpsFrames++;
+    if (now - this._fpsLast >= 500) {
+      this._fps       = Math.round(this._fpsFrames * 1000 / (now - this._fpsLast));
+  this._fpsFrames = 0;
+  this._fpsLast = now;
+    }  
+  document.getElementById('s-fps').textContent  = this._fps;
+    document.getElementById('s-tips').textContent = this.tips.length;
+    document.getElementById('s-segs').textContent = this._fmt(this.segments.n);
+    document.getElementById('s-cols').textContent = this.colonies.length;
+    document.getElementById('s-tick').textContent = this._fmt(this.tick);
+  }
+
+
+
+
+
+_loop (timestamp) {
+
+ const ticks = Math.max(1, Math.round(this.speedMult));
+    for (let i = 0; i < ticks; i++) this._simTick();
+
+    this._render();
+
+
+ if (this.lockedColony || this.hoveredColony) this._updateInspectorBody();
+
+ this._updateHUD();
+
+
+  this.audio.setActivity(this.tips.length);
+
+ requestAnimationFrame(ts => this._loop(ts));
+  }
+}
+
+
+
+
+window.addEventListener('DOMContentLoaded', () => { new GrowthEngine(); });
