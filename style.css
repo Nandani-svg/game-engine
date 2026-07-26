@@ -402,3 +402,28 @@ pointer-events: none;
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.5; }
 }
+
+
+#hint {
+    position: fixed;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 18px;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    pointer-events: none;
+    z-index: 50;
+    animation: hintFade 8s ease forwards;
+    }
+    @media (max-width: 768px) {
+
+        #hint { bottom: 280px; }
+    }
+
+@keyframes hintFade {

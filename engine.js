@@ -1034,3 +1034,63 @@ _drawGrid () {
 
     const gx0 = Math.floor(wx0 / step) * step;
     const gy0 = Math.floor(wy0 / step) * step;
+
+     for (let gx = gx0; gx <= wx1 + step; gx += step) {
+          for (let gy = gy0; gy <= wy1 + step; gy += step) {
+            ctx.beginPath();
+            ctx.arc(gx, gy, 1.2 / cam.scale, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+
+
+
+
+
+
+_toWorld (sx, sy) {
+  return [
+    (sx - this.cam.x) / this.cam.scale,
+    (sy - this.cam.y) / this.cam.scale,
+  ];
+}
+
+
+ _nearestColony (wx, wy, thresh) {
+  let best = null, bestD2 = thresh * thresh;
+  for (const col of this.colonies) {
+     const dx = col.x - wx, dy = col.y - wy;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < bestD2) { bestD2 = d2; best = col; }
+        }
+        return best;
+      }
+
+_hoverUpdate (sx, sy) {
+    if (this.lockedColony) return;
+    const [wx, wy] = this._toWorld(sx, sy);
+    const col = this._nearestColony(wx, wy, 130 / this.cam.scale);
+    if (col !== this.hoveredColony) {
+      this.hoveredColony = col;
+      if (col) this._showInspector(col);
+      else     this._hideInspector();
+    }
+  }
+
+ _clickAt (sx, sy) {
+    const [wx, wy] = this._toWorld(sx, sy);
+    const col = this._nearestColony(wx, wy, 100 / this.cam.scale);
+    if (col) {
+      this.lockedColony = this.lockedColony === col ? null : col;
+      if (this.lockedColony) this._showInspector(this.lockedColony);
+      else this._hideInspector();
+    } else {
+      this.lockedColony = null;
+      this._hideInspector();
+    }
+  }
+  
+_showInspector (col) {
+document.getElementById('insp-name').textContent = col.name;
+
