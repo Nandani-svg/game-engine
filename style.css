@@ -449,7 +449,7 @@ pointer-events: none;
 
 #inspector {
     bottom: 0; right: 0; left: 0;
-    width: 100%
+    width: 100%;
      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
      max-height: 260px;
      overflow-y: auto;

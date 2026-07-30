@@ -114,7 +114,7 @@ const items = pts.map(p => ({ p, a: Math.atan2(p.y - ty, p.x - tx) }));
 
 
 function avgDir (tx, ty, pts) {
-    let dx = 0; dy = 0;
+    let dx = 0, dy = 0;
     for (const p of pts) {
  const [ux, uy] = norm2(p.x - tx, p.y - ty);
  dx += ux; dy += uy;
@@ -366,12 +366,12 @@ class AudioEngine {
     
     
 const freq = [55, 82.4, 110];
- this.oscs = freqs.map(f => {
+ this.oscs = freq.map(f => {
       const osc  = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
       osc.frequency.value = f + rnd(-0.5, 0.5);
-      gain.gain.value = 0.25 / freqs.length;
+      gain.gain.value = 0.25 / freq.length;
       osc.connect(gain);
       gain.connect(this.master);
       osc.start();
@@ -435,7 +435,7 @@ setActivity (tipCount) {
  this.ctx      = this.canvas.getContext('2d', { alpha: false });
  this.dpr = 1;
  this.W = 0;
- this.W = 0;
+ this.H = 0;
 
 
  this.cam = { x: 0, y: 0, scale: 1 };
@@ -532,6 +532,7 @@ if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
     const mx = e.clientX, my = e.clientY;
+        const factor = Math.pow(0.92, e.deltaY > 0 ? 1 : -1);
         this.cam.x = mx - (mx - this.cam.x) * factor;
         this.cam.y = my - (my - this.cam.y) * factor;
         this.cam.scale = clamp(this.cam.scale * factor, 0.04, 12);
@@ -946,7 +947,7 @@ this.lastRenderedSeg = this.segments.n;
 
 
 
-_drawSeg (from, to, vx0, vy0, vx1, vy1) {
+_drawSegs (from, to, vx0, vy0, vx1, vy1) {
   if (from >= to) return;
   const ctx = this.ctx;
    const { x1, y1, x2, y2, lw, cr, cg, cb } = this.segments;
@@ -996,7 +997,7 @@ _drawGlows () {
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(tip.x, tip.y, gr, 0, Math.PI * 2);
-        ctx.fil();
+        ctx.fill();
   }
 }
 
@@ -1160,7 +1161,7 @@ document.getElementById('insp-body').innerHTML = `
       </div>
       <div class="ir" role="listitem">
       <span class="ir-k">KILL R</span>
-      <span class='ir-v">${kr}</span>
+      <span class="ir-v">${kr}</span>
   </div>
   `;
 
