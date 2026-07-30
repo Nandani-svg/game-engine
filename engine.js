@@ -612,7 +612,7 @@ this.showAP = !this.showAP;
       this.needsFullRedraw = true;
     });
 
-const audioBtn = document..getElementById('ctrl-audio');
+const audioBtn = document.getElementById('ctrl-audio');
 audioBtn.addEventListener('click', () => {
   if (!this.audio.active) {
     this.audio.enable();
@@ -710,7 +710,7 @@ _simTick () {
 if (this.tick >= this._nextSpawn) {
 this._nextSpawn = this.tick + CFG.SPAWN_TICKS + Math.floor(rnd(-20, 40));
 if (this.colonies.length < CFG.MAX_COLONIES) {
-  const c = this._growthCenttroid();
+  const c = this._growthCentroid();
   const angle = Math.random() * Math.PI * 2;
   const dist = rnd(250, 600);
   this._spawnColony(
@@ -731,7 +731,7 @@ for (let ti = 0; ti < len; ti++) {
       
 
   for (let i = this.tips.length - 1; i >= 0; i--) {
-    for(!this.tips[i].alive) this.tips.splice(i, 1);
+    if (!this.tips[i].alive) this.tips.splice(i, 1);
   }
 
 
@@ -795,7 +795,7 @@ if (nearby.length >= CFG.MIN_BRANCH_PTS) {
              [ndx, ndy] = avgDir(tip.x, tip.y, nearby);
                   }
                 } else {
-                  [ndx, ndy] = avgDir(tip.x, tip,y, nearby);
+                  [ndx, ndy] = avgDir(tip.x, tip.y, nearby);
                 }
               }
 
