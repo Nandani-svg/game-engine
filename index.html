@@ -3,99 +3,127 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Growth Engine — Endless Generative Organism</title>
-<meta name="description" content="An endless generative organism growing forever via space colonization and collision avoidance. No reset, no terminal state." />
+<title>Growth Engine — Space Colonization Organism</title>
+<meta name="description" content="A living organism colonizing space over time via space colonization and collision avoidance. Real-time telemetry readout. No reset, no terminal state." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<canvas id="world" aria-label="Generative growth simulation"></canvas>
-
+<canvas id="world" aria-label="Space colonization organism growth simulation"></canvas>
+<div id="graticule" aria-hidden="true"></div>
 
 <header id="hud" role="banner">
-    <div id="hud-left">
-       <h1 id="hud-title">Growth Engine</h1>
-   <span id="hud-sub">space colonization organism</span>
-     </div>
-     <nav id="hud-stats" aria-label="Live simulation statistics">
-       <span class="stat" title="Frames per second">
-         <span class="stat-label">FPS</span>
-         <span class="stat-val" id="s-fps">—</span>
-       </span>
-       <span class="stat-sep"></span>
-       <span class="stat" title="Active growth tips">
-         <span class="stat-label">TIPS</span>
-         <span class="stat-val" id="s-tips">0</span>
-  </span>
-      <span class="stat-sep"></span>
-      <span class="stat" title="Total segments grown">
-        <span class="stat-label">SEGS</span>
-        <span class="stat-val" id="s-segs">0</span>  
-     </span>
-        <span class="stat-sep"></span>
-        <span class="stat" title="Colony count">
-          <span class="stat-label">COLS</span>
-          <span class="stat-val" id="s-cols">0</span>
-        </span>
-      <span class="stat-sep"></span>
-      <span class="stat" title="Simulation tick">
-        <span class="stat-label">TICK</span>
-      <span class="stat-val" id="s-tick">0</span>
-      </span>
-      </nav>
-      </header>
-
-
-<aside id="dock" aria-label="Simulation controls">
-  <div class="dock-group">
-  <label class="dock-label" for="ctrl-speed">SPEED</label>
-      <div class="range-wrap">
-        <input type="range" id="ctrl-speed" min="0.5" max="6" step="0.5" value="1"
-               aria-label="Simulation speed multiplier" />    
-<span id="speed-val" class="range-readout">1×</span>
-</div>
-</div>
-
-<div class="dock-group">
-<label class="dock-label">DISPLAY</label>
-<div class="toggle-row">
-<button id="ctrl-glow" class="toggle active" title="Tip glow" aria-pressed="true">◉ GLOW</button>
-<button id="ctrl-ap"   class="toggle"  title="Show attraction points" aria-pressed="false">⊕ FOOD</button>
- </div>
- </div>       
-
-   <div class="dock-group">
-      <label class="dock-label">AUDIO</label>
-      <button id="ctrl-audio" class="toggle" title="Ambient audio" aria-pressed="false">♪ OFF</button>
-    </div>
-
-<button id="ctrl-home" class="dock-btn" aria-label="Reset camera to origin">⌖ RESET VIEW</button>
-  </aside>
-
-
-<aside id="inspector" class="hidden" aria-live="polite" aria-label="Colony inspector">
-    <div id="insp-header">
-      <div id="insp-name-wrap">
-        <span id="insp-badge">●</span>
-        <span id="insp-name">—</span>
-      </div>
-  <button id="insp-close" aria-label="Close inspector">✕</button>
-    </div>
-   
-    <div id="insp-palette" role="img" aria-label="Colony colour palette"></div> 
- 
-    <div id="insp-body" role="list">
-  
+  <div id="hud-left">
+    <h1 id="hud-title">GROWTH ENGINE</h1>
+    <span id="hud-sub">[SPACE COLONIZATION ORGANISM]</span>
   </div>
 
- <div id="insp-locked-tag" class="hidden">LOCKED</div>
- </aside>
+  <nav id="hud-stats" aria-label="Live telemetry readout">
+    <div class="stat-channel" title="Frames per second">
+      <span class="chan-id">CH·01</span>
+      <span class="chan-label">FPS</span>
+      <span class="chan-val" id="s-fps">—</span>
+    </div>
+    <div class="chan-rule" aria-hidden="true"></div>
+    <div class="stat-channel" title="Active growth tips">
+      <span class="chan-id">CH·02</span>
+      <span class="chan-label">TIPS</span>
+      <span class="chan-val" id="s-tips">0</span>
+    </div>
+    <div class="chan-rule" aria-hidden="true"></div>
+    <div class="stat-channel" title="Total segments grown">
+      <span class="chan-id">CH·03</span>
+      <span class="chan-label">SEGS</span>
+      <span class="chan-val" id="s-segs">0</span>
+    </div>
+    <div class="chan-rule" aria-hidden="true"></div>
+    <div class="stat-channel" title="Active colony count">
+      <span class="chan-id">CH·04</span>
+      <span class="chan-label">COLS</span>
+      <span class="chan-val" id="s-cols">0</span>
+    </div>
+    <div class="chan-rule" aria-hidden="true"></div>
+    <div class="stat-channel" title="Simulation tick">
+      <span class="chan-id">CH·05</span>
+      <span class="chan-label">TICK</span>
+      <span class="chan-val" id="s-tick">0</span>
+    </div>
+  </nav>
+
+  <div id="hud-status" aria-hidden="true">
+    <span id="status-dot"></span>
+    <span id="status-text">LIVE</span>
+  </div>
+</header>
+
+<aside id="dock" aria-label="Simulation control surface">
+  <div class="panel-header">
+    <span class="panel-title">CTRL SURFACE</span>
+    <span class="panel-id">SIM-01</span>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <div class="dock-group">
+    <label class="dock-label" for="ctrl-speed">PROPAGATION RATE</label>
+    <div class="range-wrap">
+      <div class="range-track">
+        <input type="range" id="ctrl-speed" min="0.5" max="6" step="0.5" value="1"
+               aria-label="Simulation speed multiplier" />
+        <div class="range-ticks" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <span id="speed-val" class="range-readout">1×</span>
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <div class="dock-group">
+    <span class="dock-label">DISPLAY PARAMS</span>
+    <div class="toggle-row">
+      <button id="ctrl-glow" class="rocker active" title="Tip glow overlay" aria-pressed="true">GLOW</button>
+      <button id="ctrl-ap"   class="rocker"        title="Show food/attractor points" aria-pressed="false">FOOD</button>
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <div class="dock-group">
+    <span class="dock-label">AUDIO SIGNAL</span>
+    <button id="ctrl-audio" class="rocker rocker-amber" title="Ambient audio" aria-pressed="false">SIG OFF</button>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <button id="ctrl-home" class="dock-btn" aria-label="Reset camera to origin">⌖ RECENTER FIELD</button>
+</aside>
+
+<aside id="inspector" class="hidden" aria-live="polite" aria-label="Colony signal probe">
+  <div id="insp-header">
+    <div id="insp-name-wrap">
+      <span id="insp-badge">▶</span>
+      <div id="insp-name-block">
+        <span id="insp-probe-label">PROBE</span>
+        <span id="insp-name">—</span>
+      </div>
+    </div>
+    <button id="insp-close" aria-label="Close probe readout">DSCN</button>
+  </div>
+
+  <div id="insp-palette" role="img" aria-label="Colony signal palette"></div>
+  <div id="insp-body" role="list"></div>
+  <div id="insp-locked-tag" class="hidden">⬛ SIGNAL LOCKED</div>
+</aside>
 
 <div id="hint" aria-hidden="true">
-    <span>Drag to pan · Scroll to zoom · Click colony to inspect</span> 
+  <span>PAN: HOLD+DRAG &nbsp;|&nbsp; ZOOM: SCROLL WHEEL &nbsp;|&nbsp; PROBE: CLICK COLONY</span>
 </div>
 
 <script src="engine.js"></script>
