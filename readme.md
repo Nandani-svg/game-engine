@@ -74,4 +74,27 @@ Every session is different. Each colony gets a unique name, color, and personali
 
 ---
 
+## Running Locally
+
+No build step, no dependencies.
+
+```bash
+git clone https://github.com/your-username/growth-engine.git
+cd growth-engine
+```
+
+Then open `index.html` directly in a browser — or serve it with any static file server if you need `file://` restrictions lifted:
+
+```bash
+# Python 3
+python -m http.server 8080
+
+# Node (npx)
+npx serve .
+```
+
+Navigate to `http://localhost:8080`.
+
+---
+
 *Pure HTML + Canvas + JavaScript. Zero dependencies.*
