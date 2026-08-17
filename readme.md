@@ -64,37 +64,14 @@ All simulation parameters live in the `CFG` object at the top of `engine.js`:
 
 ---
 
-## ♾️ Why It Belongs in the Endless Theme
-
-Growth Engine has no reference point, no end, no boundary and it simply exists. As every colony perish, space becomes available for new colonies that are about to grow and be born, every starving predator passes by making room for survivors. There are no scheduled events, the ecosystem functions on its own using competition.
-
-The infinite canvas makes the simulation endless. There is no fresh start: a point of attraction will disappear and will be replaced, a new colony will arise, predators will come and go.
-
-Every session is different. Each colony gets a unique name, color, and personality. Predators may or may not collapse the place before their colonies, or they might do everything at once and the outcome of events is always unpredictable.
-
----
-
 ## Running Locally
 
 No build step, no dependencies.
 
-```bash
-git clone https://github.com/your-username/growth-engine.git
-cd growth-engine
-```
+    git clone https://github.com/your-username/growth-engine.git
+    cd growth-engine
 
-Then open `index.html` directly in a browser — or serve it with any static file server if you need `file://` restrictions lifted:
-
-```bash
-# Python 3
-python -m http.server 8080
-
-# Node (npx)
-npx serve .
-```
-
-Navigate to `http://localhost:8080`.
-
+Then open index.html directly in a browser
 ---
 
 *Pure HTML + Canvas + JavaScript. Zero dependencies.*
